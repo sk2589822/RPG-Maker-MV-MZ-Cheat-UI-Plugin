@@ -285,8 +285,7 @@ const shortcutConfig = {
             name: `Set move speed to ${speed}`,
             desc: `Set move speed to ${speed}`,
             enterAction () {
-                SpeedCheat.removeFixSpeedInterval()
-                SpeedCheat.setSpeed(speed)
+                SpeedCheat.setSpeed(speed, true)
             }
         }
         return obj
