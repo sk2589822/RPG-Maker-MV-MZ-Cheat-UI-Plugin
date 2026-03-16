@@ -11,6 +11,10 @@ const defaultShortcutSettings = {
     },
 
     toggleCheatModalToSaveLocationComponent: {
+        shortcut: 'l'
+    },
+    
+    toggleCheatModalToMapEventComponent: {
         shortcut: 'm'
     },
 
@@ -125,6 +129,14 @@ const shortcutConfig = {
         desc: '',
         enterAction (param) {
             GeneralCheat.toggleCheatModal('save-recall-panel')
+        }
+    },
+
+    toggleCheatModalToMapEventComponent: {
+        name: 'Toggle "Map Events" tab',
+        desc: '',
+        enterAction (param) {
+            GeneralCheat.toggleCheatModal('map-event-panel')
         }
     },
 
