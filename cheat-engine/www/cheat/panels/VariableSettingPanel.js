@@ -1,5 +1,3 @@
-import {TRANSLATE_SETTINGS, TRANSLATOR} from '../js/TranslateHelper.js'
-
 export default {
     name: 'VariableSettingPanel',
 
@@ -133,10 +131,6 @@ export default {
 
         async getVariableNames () {
             const rawVariableNames = $dataSystem.variables.slice()
-
-            if (TRANSLATE_SETTINGS.isVariableTranslateEnabled()) {
-                return await TRANSLATOR.translateBulk(rawVariableNames)
-            }
 
             return rawVariableNames
         },

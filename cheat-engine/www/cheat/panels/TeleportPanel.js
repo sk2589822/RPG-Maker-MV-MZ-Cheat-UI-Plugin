@@ -1,4 +1,3 @@
-import {TRANSLATE_SETTINGS, TRANSLATOR} from '../js/TranslateHelper.js'
 import {Alert} from '../js/AlertHelper.js'
 
 export default {
@@ -157,10 +156,6 @@ export default {
 
         async getMapNames (dataMapInfos) {
             const rawNames = dataMapInfos.map(m => m ? m.name : '')
-
-            if (TRANSLATE_SETTINGS.isMapTranslateEnabled()) {
-                return await TRANSLATOR.translateBulk(rawNames)
-            }
 
             return rawNames
         },
