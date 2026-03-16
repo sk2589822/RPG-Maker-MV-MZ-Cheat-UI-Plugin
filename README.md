@@ -5,3 +5,4 @@
 ## Changed
 
 - Remove translation feature
+- Update default shortcuts

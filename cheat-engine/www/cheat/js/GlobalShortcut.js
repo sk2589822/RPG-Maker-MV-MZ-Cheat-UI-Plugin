@@ -11,7 +11,7 @@ const defaultShortcutSettings = {
     },
 
     toggleCheatModalToSaveLocationComponent: {
-        shortcut: 'ctrl m'
+        shortcut: 'm'
     },
 
     quickSave: {
@@ -29,11 +29,11 @@ const defaultShortcutSettings = {
     },
 
     openSaveScene: {
-        shortcut: 'ctrl ['
+        shortcut: '['
     },
 
     openLoadScene: {
-        shortcut: 'ctrl ]'
+        shortcut: ']'
     },
 
     gotoTitle: {
@@ -53,23 +53,23 @@ const defaultShortcutSettings = {
     },
 
     toggleNoClip: {
-        shortcut: 'alt w'
+        shortcut: 'w'
     },
 
     enemyWound: {
-        shortcut: 'alt 1'
+        shortcut: 'alt s'
     },
 
     enemyRecovery: {
-        shortcut: 'alt 0'
+        shortcut: 'alt a'
     },
 
     partyWound: {
-        shortcut: 'alt 2'
+        shortcut: 'alt x'
     },
 
     partyRecovery: {
-        shortcut: 'alt 9'
+        shortcut: 'alt z'
     },
 
     setSpeed: {
