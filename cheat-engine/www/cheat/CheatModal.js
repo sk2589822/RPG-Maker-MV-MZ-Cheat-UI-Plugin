@@ -33,8 +33,8 @@ export default {
 <v-card 
     dark
     class="z-index-cheat-0"
-    width="700" 
-    height="400">
+    width="95vw" 
+    height="95vh">
     <v-row 
         class="fill-height ma-0 pa-0">
         <div

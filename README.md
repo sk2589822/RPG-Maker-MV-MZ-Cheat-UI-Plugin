@@ -7,3 +7,4 @@
 - Remove translation feature
 - Update default shortcuts
 - Add short for setting speed to 1-9
+- Change cheat modal size to 95% of window
