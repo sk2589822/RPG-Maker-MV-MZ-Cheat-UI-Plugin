@@ -158,7 +158,6 @@ export default {
 
     mounted () {
         this.initializeVariables()
-        this.$refs.locationAliasField.focus()
     },
 
     computed: {
