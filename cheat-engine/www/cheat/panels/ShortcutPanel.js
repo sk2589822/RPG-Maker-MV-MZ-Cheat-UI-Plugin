@@ -75,7 +75,7 @@ export default {
         :items="filteredShortcuts"
         :search="search"
         :custom-filter="tableItemFilter"
-        :items-per-page="5">
+        :items-per-page="15">
         <template
             v-slot:item.shortcut="{ item }">
             <key-input-field

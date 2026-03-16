@@ -8,3 +8,4 @@
 - Update default shortcuts
 - Add short for setting speed to 1-9
 - Change cheat modal size to 95% of window
+- Show 15 items per page
