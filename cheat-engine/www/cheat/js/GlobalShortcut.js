@@ -72,12 +72,12 @@ const defaultShortcutSettings = {
         shortcut: 'alt z'
     },
 
-    setSpeed: {
-        shortcut: '', // no keymap
-        param: {
-            speed: 5
+    ...[1, 2, 3, 4, 5, 6, 7, 8, 9].reduce((obj, speed) => {
+        obj[`setSpeed${speed}`] = {
+            shortcut: `alt ${speed}`
         }
-    },
+        return obj
+    }, {}),
 
     skipMessage: {
         shortcut: '',
@@ -256,26 +256,17 @@ const shortcutConfig = {
         }
     },
 
-    setSpeed: {
-        name: 'Set speed',
-        desc: 'Set speed to certain value',
-        param: {
-            speed: {
-                name: 'Speed',
-                desc: 'Speed for set',
-                isInvalidValue (value) {
-                    return isInValueInRange(value, 1, 10)
-                },
-                convertValue (value) {
-                    return Number(value)
-                }
+    ...[1, 2, 3, 4, 5, 6, 7, 8, 9].reduce((obj, speed) => {
+        obj[`setSpeed${speed}`] = {
+            name: `Set speed to ${speed}`,
+            desc: `Set move speed to ${speed}`,
+            enterAction () {
+                SpeedCheat.removeFixSpeedInterval()
+                SpeedCheat.setSpeed(speed)
             }
-        },
-        enterAction (param) {
-            SpeedCheat.removeFixSpeedInterval()
-            SpeedCheat.setSpeed(param.speed)
         }
-    },
+        return obj
+    }, {}),
 
     skipMessage: {
         name: 'Skip Message',

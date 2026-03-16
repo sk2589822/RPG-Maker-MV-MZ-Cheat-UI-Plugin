@@ -6,3 +6,4 @@
 
 - Remove translation feature
 - Update default shortcuts
+- Add short for setting speed to 1-9
