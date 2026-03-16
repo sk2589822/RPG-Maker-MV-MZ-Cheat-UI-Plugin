@@ -4,6 +4,10 @@
 
 ## ChangeLog
 
+v1.1.2
+
+- Properly remove translation feature
+
 v1.1.1
 
 - Set fixed move speed when using shortcut
