@@ -2,8 +2,9 @@
 
 - Forked from [paramonos/RPG-Maker-MV-MZ-Cheat-UI-Plugin](https://github.com/paramonos/RPG-Maker-MV-MZ-Cheat-UI-Plugin) v1.0.3
 
-## Changed
+## ChangeLog
 
+v1.1.0
 - Remove translation feature
 - Update default shortcuts
 - Add shorts for setting move speed to 1-9
