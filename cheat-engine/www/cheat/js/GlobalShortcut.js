@@ -1,7 +1,7 @@
 import {Key} from './KeyCodes.js'
 import {Alert} from './AlertHelper.js'
 import {cloneObject} from './Tools.js'
-import {SpeedCheat, SceneCheat, GeneralCheat, BattleCheat, MessageCheat} from './CheatHelper.js'
+import {SpeedCheat, GameSpeedCheat, SceneCheat, GeneralCheat, BattleCheat, MessageCheat} from './CheatHelper.js'
 import {ShortcutMap} from './ShortcutHelper.js'
 
 // default shortcut settings
@@ -77,8 +77,12 @@ const defaultShortcutSettings = {
     },
 
     ...[1, 2, 3, 4, 5, 6, 7, 8, 9].reduce((obj, speed) => {
-        obj[`setSpeed${speed}`] = {
+        obj[`setMoveSpeed${speed}`] = {
             shortcut: `alt ${speed}`
+        }
+        
+        obj[`setGameSpeed${speed}`] = {
+            shortcut: `shift ${speed}`
         }
         return obj
     }, {}),
@@ -269,8 +273,16 @@ const shortcutConfig = {
     },
 
     ...[1, 2, 3, 4, 5, 6, 7, 8, 9].reduce((obj, speed) => {
-        obj[`setSpeed${speed}`] = {
-            name: `Set speed to ${speed}`,
+        obj[`setGameSpeed${speed}`] = {
+            name: `Set game speed to ${speed}`,
+            desc: `Set game speed to ${speed}`,
+            enterAction () {
+                GameSpeedCheat.setGameSpeed(speed, GameSpeedCheat.sceneOptions().all)
+            }
+        }
+
+        obj[`setMoveSpeed${speed}`] = {
+            name: `Set move speed to ${speed}`,
             desc: `Set move speed to ${speed}`,
             enterAction () {
                 SpeedCheat.removeFixSpeedInterval()
