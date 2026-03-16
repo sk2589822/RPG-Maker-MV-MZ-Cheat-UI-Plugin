@@ -136,8 +136,12 @@ export default {
         },
 
         onItemChange (item) {
+            const value = Number.isNaN(Number(item.value))
+            ? item.value
+            : Number(item.value)
+            
             // modify value
-            $gameVariables.setValue(item.id, item.value)
+            $gameVariables.setValue(item.id, value)
 
             // refresh
             item.value = $gameVariables.value(item.id)

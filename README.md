@@ -10,4 +10,5 @@
 - Change cheat modal size to 95% of window
 - Show 15 items per page
 - Do not focus on filter input when SaveRecallPanel opened
+- Properly set variable when input is number
 - Add map events panel (Forked from https://github.com/Justype/RPG-Maker-MV-MZ-Cheat-UI-Plugin)
