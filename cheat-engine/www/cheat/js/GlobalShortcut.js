@@ -77,16 +77,19 @@ const defaultShortcutSettings = {
     },
 
     ...[1, 2, 3, 4, 5, 6, 7, 8, 9].reduce((obj, speed) => {
-        obj[`setMoveSpeed${speed}`] = {
-            shortcut: `alt ${speed}`
-        }
-        
         obj[`setGameSpeed${speed}`] = {
             shortcut: `shift ${speed}`
         }
         return obj
     }, {}),
 
+    ...[4, 5, 6].reduce((obj, speed) => {
+        obj[`setMoveSpeed${speed}`] = {
+            shortcut: `alt ${speed - 3}`
+        }
+        return obj
+    }, {}),
+    
     skipMessage: {
         shortcut: '',
         param: {
@@ -280,7 +283,10 @@ const shortcutConfig = {
                 GameSpeedCheat.setGameSpeed(speed, GameSpeedCheat.sceneOptions().all)
             }
         }
+        return obj
+    }, {}),
 
+    ...[4, 5, 6].reduce((obj, speed) => {
         obj[`setMoveSpeed${speed}`] = {
             name: `Set move speed to ${speed}`,
             desc: `Set move speed to ${speed}`,
