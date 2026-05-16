@@ -4,6 +4,10 @@
 
 ## ChangeLog
 
+v1.1.3
+
+- Keep only 3 move speed shortcuts
+
 v1.1.2
 
 - Properly remove translation feature
