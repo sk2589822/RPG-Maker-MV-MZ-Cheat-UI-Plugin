@@ -118,6 +118,30 @@ export class ShortcutMap {
             return this.actionTable[index]
         }
 
-        return null
+        // Subset matching: a shortcut triggers if its required modifiers are all
+        // present in the pressed key. Pick the most specific (most modifiers) match.
+        const pressedMods = ShortcutMap.toInt(key.ctrl)
+            | (ShortcutMap.toInt(key.alt) << 1)
+            | (ShortcutMap.toInt(key.shift) << 2)
+            | (ShortcutMap.toInt(key.meta) << 3)
+        const baseIndex = 16 * key.code
+
+        let bestMatch = null
+        let bestBits = -1
+
+        let sub = pressedMods
+        do {
+            sub = (sub - 1) & pressedMods
+            const item = this.actionTable[sub + baseIndex]
+            if (item) {
+                const bits = sub.toString(2).replace(/0/g, '').length
+                if (bits > bestBits) {
+                    bestBits = bits
+                    bestMatch = item
+                }
+            }
+        } while (sub > 0)
+
+        return bestMatch
     }
 }
