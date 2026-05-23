@@ -4,6 +4,10 @@
 
 ## ChangeLog
 
+v1.2.0
+
+- Shortcuts now trigger even when extra modifier keys are held (e.g. pressing shift+m also fires a shortcut mapped to m)
+
 v1.1.3
 
 - Keep only 3 move speed shortcuts
