@@ -4,6 +4,10 @@
 
 ## ChangeLog
 
+v1.3.0
+
+- Scroll the mouse wheel over a table to flip pages (scroll down for the next page, up for the previous). Applies to the item, save/recall, shortcut, switch, teleport and variable panels
+
 v1.2.0
 
 - Shortcuts now trigger even when extra modifier keys are held (e.g. pressing shift+m also fires a shortcut mapped to m)
