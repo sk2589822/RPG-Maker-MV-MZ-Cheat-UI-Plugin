@@ -2,9 +2,12 @@ import KeyInputField from '../components/KeyInputField.js'
 import { GLOBAL_SHORTCUT } from '../js/GlobalShortcut.js'
 import {Key} from '../js/KeyCodes.js'
 import {Alert} from '../js/AlertHelper.js'
+import WheelPagingMixin from '../mixins/WheelPagingMixin.js'
 
 export default {
     name: 'ShortcutPanel',
+
+    mixins: [WheelPagingMixin],
 
     components: {
         KeyInputField
@@ -75,7 +78,10 @@ export default {
         :items="filteredShortcuts"
         :search="search"
         :custom-filter="tableItemFilter"
-        :items-per-page="15">
+        :items-per-page="15"
+        :page.sync="page"
+        @page-count="pageCount = $event"
+        @wheel.native.prevent="onWheelPage">
         <template
             v-slot:item.shortcut="{ item }">
             <key-input-field

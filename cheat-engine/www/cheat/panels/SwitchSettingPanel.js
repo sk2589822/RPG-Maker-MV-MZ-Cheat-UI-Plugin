@@ -1,7 +1,10 @@
 import {ConfirmDialog} from '../js/DialogHelper.js'
+import WheelPagingMixin from '../mixins/WheelPagingMixin.js'
 
 export default {
     name: 'SwitchSettingPanel',
+
+    mixins: [WheelPagingMixin],
 
     template: `
 <v-card flat class="ma-0 pa-0">
@@ -12,7 +15,10 @@ export default {
         :items="filteredTableItems"
         :search="search"
         :custom-filter="tableItemFilter"
-        :items-per-page="15">
+        :items-per-page="15"
+        :page.sync="page"
+        @page-count="pageCount = $event"
+        @wheel.native.prevent="onWheelPage">
         <template v-slot:top>
             <v-text-field
                 label="Search..."
