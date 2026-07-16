@@ -1,10 +1,11 @@
 import {Alert} from '../js/AlertHelper.js'
 import WheelPagingMixin from '../mixins/WheelPagingMixin.js'
+import WheelStepMixin from '../mixins/WheelStepMixin.js'
 
 export default {
     name: 'TeleportPanel',
 
-    mixins: [WheelPagingMixin],
+    mixins: [WheelPagingMixin, WheelStepMixin],
 
     template: `
 <v-card flat class="ma-0 pa-0">
@@ -20,6 +21,7 @@ export default {
                 hide-details
                 outlined
                 @keydown.self.stop
+                @wheel.native.stop.prevent="onWheelStep($event, $data, 'inputX')"
                 @focus="$event.target.select()">
             </v-text-field>
         </v-col>
@@ -34,6 +36,7 @@ export default {
                 hide-details
                 outlined
                 @keydown.self.stop
+                @wheel.native.stop.prevent="onWheelStep($event, $data, 'inputY')"
                 @focus="$event.target.select()">
             </v-text-field>
         </v-col>

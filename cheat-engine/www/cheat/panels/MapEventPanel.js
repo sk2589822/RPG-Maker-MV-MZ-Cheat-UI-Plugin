@@ -1,5 +1,9 @@
+import WheelStepMixin from '../mixins/WheelStepMixin.js'
+
 export default {
     name: 'MapEventPanel',
+
+    mixins: [WheelStepMixin],
 
     template: `
 <v-card flat class="ma-0 pa-0">
@@ -57,7 +61,8 @@ export default {
                 type="number"
                 background-color="grey darken-3"
                 hide-details
-                outlined>
+                outlined
+                @wheel.native.stop.prevent="onWheelStep($event, $data, 'readInterval')">
             </v-text-field>
         </v-col>
     </v-row>

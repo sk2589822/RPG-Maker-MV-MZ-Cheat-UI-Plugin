@@ -1,9 +1,10 @@
 import WheelPagingMixin from '../mixins/WheelPagingMixin.js'
+import WheelStepMixin from '../mixins/WheelStepMixin.js'
 
 export default {
     name: 'ItemTableTab',
 
-    mixins: [WheelPagingMixin],
+    mixins: [WheelPagingMixin, WheelStepMixin],
 
     template: `
 <v-card flat class="ma-0 pa-0">
@@ -70,6 +71,7 @@ export default {
                 label="Amount"
                 dense
                 @keydown.self.stop
+                @wheel.native.stop.prevent="onWheelStep($event, item, 'amount', () => onItemChange(item))"
                 @change="onItemChange(item)"
                 @focus="$event.target.select()">
             </v-text-field>

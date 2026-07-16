@@ -1,7 +1,10 @@
 import {GeneralCheat} from '../js/CheatHelper.js'
+import WheelStepMixin from '../mixins/WheelStepMixin.js'
 
 export default {
     name: 'StatsSettingPanel',
+
+    mixins: [WheelStepMixin],
 
     template: `
 <v-card flat class="ma-0 pa-0">
@@ -60,6 +63,7 @@ export default {
                             dense
                             hide-details
                             @keydown.self.stop
+                            @wheel.native.stop.prevent="onWheelStep($event, actor, 'level', () => onLevelChange(actor))"
                             @change="onLevelChange(actor)"
                             @focus="$event.target.select()"></v-text-field>
                     </v-col>
@@ -71,6 +75,7 @@ export default {
                             dense
                             hide-details
                             @keydown.self.stop
+                            @wheel.native.stop.prevent="onWheelStep($event, actor, 'exp', () => onExpChange(actor))"
                             @change="onExpChange(actor)"
                             @focus="$event.target.select()"></v-text-field>
                     </v-col>
@@ -90,6 +95,7 @@ export default {
                             dense
                             hide-details
                             @keydown.self.stop
+                            @wheel.native.stop.prevent="onWheelStep($event, actor.param, paramIdx, () => onParamChange(actor, paramIdx))"
                             @change="onParamChange(actor, paramIdx)"
                             @focus="$event.target.select()"></v-text-field>
                     </v-col>
