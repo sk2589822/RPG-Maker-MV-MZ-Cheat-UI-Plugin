@@ -1,7 +1,10 @@
 import { GeneralCheat, GameSpeedCheat, SpeedCheat, SceneCheat } from '../js/CheatHelper.js'
+import WheelStepMixin from '../mixins/WheelStepMixin.js'
 
 export default {
     name: 'GeneralPanel',
+
+    mixins: [WheelStepMixin],
 
     template: `
 <v-card 
@@ -26,6 +29,7 @@ export default {
             dense
             hide-details
             @keydown.self.stop
+            @wheel.native.stop.prevent="onWheelStep($event, $data, 'gold', onGoldChange)"
             @change="onGoldChange"
             @focus="$event.target.select()">
         </v-text-field>

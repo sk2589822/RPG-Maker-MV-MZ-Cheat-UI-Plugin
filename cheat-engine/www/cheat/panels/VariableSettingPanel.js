@@ -1,9 +1,10 @@
 import WheelPagingMixin from '../mixins/WheelPagingMixin.js'
+import WheelStepMixin from '../mixins/WheelStepMixin.js'
 
 export default {
     name: 'VariableSettingPanel',
 
-    mixins: [WheelPagingMixin],
+    mixins: [WheelPagingMixin, WheelStepMixin],
 
     template: `
 <v-card flat class="ma-0 pa-0">
@@ -57,6 +58,7 @@ export default {
                 label="Value"
                 dense
                 @keydown.self.stop
+                @wheel.native.stop.prevent="onWheelStep($event, item, 'value', () => onItemChange(item))"
                 @change="onItemChange(item)"
                 @focus="$event.target.select()">
             </v-text-field>

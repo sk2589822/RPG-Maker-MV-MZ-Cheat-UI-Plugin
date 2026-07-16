@@ -1,5 +1,9 @@
+import WheelStepMixin from '../mixins/WheelStepMixin.js'
+
 export default {
     name: 'HealthSettingTab',
+
+    mixins: [WheelStepMixin],
 
     template: `
 <div>
@@ -25,6 +29,7 @@ export default {
                 label="Curr Hp"
                 dense
                 @keydown.self.stop
+                @wheel.native.stop.prevent="onWheelStep($event, item.hp, 'hp', () => onDataChange())"
                 @change="onDataChange"
                 @focus="$event.target.select()">
             </v-text-field>
@@ -42,6 +47,7 @@ export default {
                 label="Curr Mp"
                 dense
                 @keydown.self.stop
+                @wheel.native.stop.prevent="onWheelStep($event, item.mp, 'mp', () => onDataChange())"
                 @change="onDataChange"
                 @focus="$event.target.select()">
             </v-text-field>
