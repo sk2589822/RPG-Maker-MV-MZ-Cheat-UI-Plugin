@@ -4,6 +4,10 @@
 
 ## ChangeLog
 
+v1.4.0
+
+- Scroll the mouse wheel over a numeric input to change its value (scroll up to increase, down to decrease); hold Shift to step by 10. Applies to item/weapon/armor amounts, variable values, HP/MP, actor level/EXP/stats, gold, teleport X/Y and the map read-interval
+
 v1.3.0
 
 - Scroll the mouse wheel over a table to flip pages (scroll down for the next page, up for the previous). Applies to the item, save/recall, shortcut, switch, teleport and variable panels
