@@ -17,7 +17,6 @@ export default {
     <v-fade-transition leave-absolute>
         <cheat-modal
             id="cheat-modal"
-            class="opaque-on-mouseover"
             v-model="currentComponentName"
             v-if="show"
             >
@@ -26,12 +25,6 @@ export default {
     <alert-snackbar></alert-snackbar>
     <confirm-dialog></confirm-dialog>
 </div>`,
-
-    style: `
-    #cheat-modal: {
-        opacity: 0.7;
-    }
-    `,
 
     data () {
         return {
