@@ -60,6 +60,7 @@ export default {
         </template>
         <template
             v-slot:item.amount="{ item }">
+            <div class="d-flex justify-end">
             <v-text-field
                 background-color="grey darken-3"
                 class="d-inline-flex"
@@ -75,6 +76,7 @@ export default {
                 @change="onItemChange(item)"
                 @focus="$event.target.select()">
             </v-text-field>
+            </div>
         </template>
     </v-data-table>
     
@@ -158,7 +160,8 @@ export default {
             this.tableHeaders = this.headers.slice(0)
             this.tableHeaders.push({
                 text: 'Amount',
-                value: 'amount'
+                value: 'amount',
+                align: 'end'
             })
 
             this.tableItems = this.items.filter(item => !!item).map(item => {

@@ -57,13 +57,16 @@ export default {
         </template>
         <template
             v-slot:item.value="{ item }">
-            <v-switch
-                v-model="item.value"
-                dense
-                hide-details
-                @click.self.stop
-                @change="onItemChange(item)">
-            </v-switch>
+            <div class="d-flex justify-end">
+                <v-switch
+                    v-model="item.value"
+                    dense
+                    hide-details
+                    class="ma-0"
+                    @click.self.stop
+                    @change="onItemChange(item)">
+                </v-switch>
+            </div>
         </template>
     </v-data-table>
     
@@ -104,7 +107,8 @@ export default {
                 },
                 {
                     text: 'Value',
-                    value: 'value'
+                    value: 'value',
+                    align: 'end'
                 }
             ],
             tableItems: []

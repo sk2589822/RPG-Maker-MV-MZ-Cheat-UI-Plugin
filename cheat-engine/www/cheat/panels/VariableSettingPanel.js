@@ -47,6 +47,7 @@ export default {
         </template>
         <template
             v-slot:item.value="{ item }">
+            <div class="d-flex justify-end">
             <v-text-field
                 background-color="grey darken-3"
                 class="d-inline-flex"
@@ -62,6 +63,7 @@ export default {
                 @change="onItemChange(item)"
                 @focus="$event.target.select()">
             </v-text-field>
+            </div>
         </template>
     </v-data-table>
     
@@ -102,7 +104,8 @@ export default {
                 },
                 {
                     text: 'Value',
-                    value: 'value'
+                    value: 'value',
+                    align: 'end'
                 }
             ],
             tableItems: []
