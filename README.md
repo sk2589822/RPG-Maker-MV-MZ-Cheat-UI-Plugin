@@ -4,6 +4,10 @@
 
 ## ChangeLog
 
+v1.4.2
+
+- Give the value/amount inputs a fixed width and right-align their digits so they no longer vary in size row to row in the item and variable panels
+
 v1.4.1
 
 - The cheat UI now stays fully opaque at all times (removed the fade that made it transparent until hovered)
