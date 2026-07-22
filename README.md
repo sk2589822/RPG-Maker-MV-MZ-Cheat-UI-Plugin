@@ -4,6 +4,11 @@
 
 ## ChangeLog
 
+v1.4.1
+
+- The cheat UI now stays fully opaque at all times (removed the fade that made it transparent until hovered)
+- Value inputs and switch toggles are right-aligned in the item, switch and variable panels
+
 v1.4.0
 
 - Scroll the mouse wheel over a numeric input to change its value (scroll up to increase, down to decrease); hold Shift to step by 10. Applies to item/weapon/armor amounts, variable values, HP/MP, actor level/EXP/stats, gold, teleport X/Y and the map read-interval
