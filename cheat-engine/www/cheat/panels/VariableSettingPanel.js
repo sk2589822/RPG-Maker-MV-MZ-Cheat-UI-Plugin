@@ -50,9 +50,10 @@ export default {
             <div class="d-flex justify-end">
             <v-text-field
                 background-color="grey darken-3"
-                class="d-inline-flex"
+                class="d-inline-flex flex-grow-0"
                 height="10"
-                style="width: 60px;"
+                style="flex: 0 0 60px; width: 60px;"
+                reverse
                 hide-details
                 solo
                 v-model="item.value"
