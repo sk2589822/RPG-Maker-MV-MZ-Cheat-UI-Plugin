@@ -4,6 +4,10 @@
 
 ## ChangeLog
 
+v1.4.3
+
+- Reopening the cheat UI now returns each panel to the page it was on when last closed
+
 v1.4.2
 
 - Give the value/amount inputs a fixed width and right-align their digits so they no longer vary in size row to row in the item and variable panels
