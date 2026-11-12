@@ -29,7 +29,7 @@ Downloads are untrusted data: give each one its own empty scratch directory, kee
 
 ## 2. Audit (gate)
 
-Dispatch a general-purpose subagent whose prompt is: read `.claude/skills/update-upstream/AUDIT.md` and follow it, with the absolute paths of the baseline and target trees and a scratch directory for its analysis. The separate context keeps the later steps from pulling on the audit.
+Dispatch a general-purpose subagent whose prompt is: read `.claude/skills/update-upstream/AUDIT.md` and follow it, with the absolute paths of the baseline and target trees, their release zips, and a scratch directory for its analysis. The separate context keeps the later steps from pulling on the audit.
 
 When the report returns, open every delta it cites in the network, process, code-loading, filesystem, and updater categories yourself and check that the code says what the report says.
 
@@ -60,7 +60,7 @@ Edit the raw minified file with a script that asserts each original string occur
 
 Two commits, following the branch's convention, so the official-vs-ours diff stays reviewable:
 
-1. `chore: update upstream to <tag>`: replace `cheat/` and `cheat-version-description.json` with the target's official files; in README set the version (title, source link) and list every official SHA-256.
+1. `chore: update upstream to <tag>`: replace `cheat/` and `cheat-version-description.json` with the target's official files; in README set the version (title, source link) and list every official SHA-256; in `AUDIT.md`, fold the deltas the audit explained into the known-benign list and bump its heading's version, so the next audit starts from this build.
 2. `fix: disable network auto-updater in <tag>`: apply step 3's edits; in README update the modification table with the new minified strings and list the edited `cheat.js` hash next to the official one, marked `(官方原檔，修改前)`.
 
 Run `python -I -X utf8 .claude/skills/update-upstream/test_patch.py` on the second commit.
