@@ -19,7 +19,8 @@ SHA-256：
 ```
 70dd15b92fab1c74eb0fb07ef6dde51848cb29a6aaf4016a467bff27ea47aab2  cheat-version-description.json   (官方原檔)
 0ad9b7d7818b3e0242ff3093df29449345f4c8698e8c56aabc15e184019d5bb4  cheat/cheat.css                  (官方原檔)
-d85ddbe1871c110cfcc5b076fde9965f9641eb06a1a08ee9dd07bca5e0ae5172  cheat/cheat.js                   (已修改；官方為 afb45b22…288761)
+d85ddbe1871c110cfcc5b076fde9965f9641eb06a1a08ee9dd07bca5e0ae5172  cheat/cheat.js                   (已修改)
+afb45b22f73bbe3c4c3519bb467f121bda76349966c0158ad54c0082cc288761  cheat/cheat.js                   (官方原檔，修改前)
 0c3741fa94fb2984d18b175dadfbadc00b9ab0137df42e8be2d1a6a0aa92707e  cheat/init/import.js             (官方原檔)
 6d7e6d13766b9bc7cf4ff189184f8b04e14cb52ed674e1108ae11591c6664c66  cheat/LICENSES.txt               (官方原檔)
 ```
