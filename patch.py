@@ -1,4 +1,4 @@
-"""把這個資料夾裡的 cheat（已停用自動更新）裝進 RPG Maker MV/MZ 遊戲，或從遊戲移除。
+"""把這個資料夾裡的 cheat（已停用自動更新）和 plugin/ 的速度快捷鍵裝進 RPG Maker MV/MZ 遊戲，或從遊戲移除。
 
 用法：
     python patch.py <遊戲資料夾>            安裝或更新
@@ -9,16 +9,26 @@
 """
 
 import argparse
+import json
 import re
 import shutil
 import sys
 from pathlib import Path
 
 PAYLOAD_DIR = Path(__file__).resolve().parent
-PAYLOAD_ITEMS = ['cheat', 'cheat-version-description.json']
+PAYLOAD_ITEMS = ['cheat', 'cheat-version-description.json', 'plugin']
 
 LOADER = 'cheat/init/import.js'
 MAIN_BACKUP_SUFFIX = '.cheat-backup'
+
+# 自己維護的外掛，跟官方 cheat 分開放，官方更新時不受影響
+PLUGIN_SRC = PAYLOAD_DIR / 'plugin'
+PLUGIN_FILES = ['speed-keys.js', 'speed-keys.json']  # 裝進遊戲 cheat-plugin/ 的檔案
+PLUGIN_DIR_NAME = 'cheat-plugin'
+PLUGIN_ENTRY = f'{PLUGIN_DIR_NAME}/speed-keys.js'
+SPEED_KEYS = PLUGIN_SRC / 'speed-keys.json'
+SHORTCUTS_OVERRIDE = PLUGIN_SRC / 'shortcuts-override.json'
+SHORTCUT_MODIFIERS = ['ctrl', 'alt', 'shift', 'meta']
 
 # main.js 的改法跟官方網頁 patcher 一致
 MV_ANCHOR = re.compile(r'^\s*PluginManager\s*\.\s*setup\s*\(\s*\$plugins\s*\)\s*;')
@@ -31,6 +41,8 @@ MV_LINES = [
     f"PluginManager.loadScript('../../{LOADER}');",
 ]
 MZ_LINE = f'    "{LOADER}",'
+MV_PLUGIN_LINE = f"PluginManager.loadScript('../../{PLUGIN_ENTRY}');"
+MZ_PLUGIN_LINE = f'    "{PLUGIN_ENTRY}",'
 
 
 class PatchError(Exception):
@@ -50,13 +62,19 @@ def mz_array_end(lines, start):
     return end
 
 
+def strip_plugin(lines):
+    return [line for line in lines if f'{PLUGIN_DIR_NAME}/' not in line]
+
+
 def strip_mv(lines):
+    lines = strip_plugin(lines)
     if not any(LOADER in line for line in lines):
         return lines
     return [line for line in lines if LOADER not in line and not MV_CHEAT_LINE.search(line)]
 
 
 def strip_mz(lines):
+    lines = strip_plugin(lines)
     start = find_index(lines, MZ_ANCHOR)
     end = mz_array_end(lines, start)
     body = [line for line in lines[start + 1:end] if LOADER not in line]
@@ -75,10 +93,10 @@ def patch_lines(lines, engine):
     if engine == 'MV':
         lines = strip_mv(lines)
         anchor = find_index(lines, MV_ANCHOR)
-        return lines[:anchor + 1] + MV_LINES + lines[anchor + 1:]
+        return lines[:anchor + 1] + MV_LINES + [MV_PLUGIN_LINE] + lines[anchor + 1:]
     lines = strip_mz(lines)
     anchor = find_index(lines, MZ_ANCHOR)
-    return lines[:anchor + 1] + [MZ_LINE] + lines[anchor + 1:]
+    return lines[:anchor + 1] + [MZ_LINE, MZ_PLUGIN_LINE] + lines[anchor + 1:]
 
 
 def unpatch_lines(lines, engine):
@@ -120,11 +138,92 @@ def resolve_game(raw):
 def check_payload():
     missing = [name for name in PAYLOAD_ITEMS if not (PAYLOAD_DIR / name).exists()]
     if missing:
-        raise PatchError(f'{PAYLOAD_DIR} 少了：{", ".join(missing)}')
+        raise PatchError(
+            f'{PAYLOAD_DIR} 少了：{", ".join(missing)}。'
+            'patch.py 要跟 cheat/、cheat-version-description.json、plugin/ 放在同一個資料夾執行（也就是 cheat repo 的 v2 分支）')
+
+
+def normalize_shortcut(text):
+    """cheat 的快捷鍵字串（例如 "Alt 1"）轉成固定寫法，方便比對。"""
+    tokens = str(text).lower().split()
+    return ' '.join([m for m in SHORTCUT_MODIFIERS if m in tokens] + [t for t in tokens if t not in SHORTCUT_MODIFIERS])
+
+
+def read_json(path):
+    return json.loads(path.read_text(encoding='utf-8-sig'))
+
+
+def load_plugin_config():
+    """讀 plugin/ 的設定，回傳（速度快捷鍵佔用的鍵, shortcuts 覆蓋設定）。"""
+    try:
+        speed_keys = read_json(SPEED_KEYS)
+        override = read_json(SHORTCUTS_OVERRIDE)
+    except (OSError, ValueError) as e:
+        raise PatchError(f'plugin/ 的設定檔讀不到或不是正確的 JSON：{e}')
+    plugin_keys = {normalize_shortcut(key)
+                   for table in (speed_keys.get('gameSpeed', {}), speed_keys.get('moveSpeed', {}))
+                   for key in table}
+    clashes = [f'{action_id}（{entry.get("shortcut")}）' for action_id, entry in override.items()
+               if normalize_shortcut(entry.get('shortcut', '')) in plugin_keys]
+    if clashes:
+        raise PatchError(f'shortcuts-override.json 的 {"、".join(clashes)} 跟 speed-keys.json 用了同一個鍵')
+    return plugin_keys, override
+
+
+def merge_shortcuts(root, override, plugin_keys):
+    """把覆蓋設定寫進遊戲的 shortcuts.json，並清掉跟速度快捷鍵撞鍵的 cheat 快捷鍵。"""
+    path = root / 'www' / 'cheat-settings' / 'shortcuts.json'
+    current = {}
+    if path.is_file():
+        try:
+            current = read_json(path)
+        except ValueError:
+            current = None
+        if not isinstance(current, dict):
+            print(f'註：{path} 不是正確的 JSON，沒有套用快捷鍵覆蓋設定')
+            return
+
+    merged = {**current, **override}
+    cleared = []
+    for action_id, entry in merged.items():
+        if action_id in override or not isinstance(entry, dict):
+            continue
+        if normalize_shortcut(entry.get('shortcut', '')) in plugin_keys:
+            cleared.append(f'{action_id}（{entry["shortcut"]}）')
+            merged[action_id] = {**entry, 'shortcut': ''}
+
+    if merged == current:
+        print('shortcuts.json 已經是覆蓋後的設定')
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(merged, ensure_ascii=False, indent=2), encoding='utf-8')
+    print(f'已套用快捷鍵覆蓋設定：{path}')
+    if cleared:
+        print(f'已清掉跟速度快捷鍵撞鍵的 cheat 快捷鍵：{"、".join(cleared)}')
+
+
+def reset_cheat_game_speed(root):
+    """cheat 視窗記住的遊戲速度會跟速度快捷鍵相乘，裝外掛時重設成 1 倍。"""
+    path = root / 'www' / 'cheat-settings' / 'gameSpeed.json'
+    if not path.is_file():
+        return
+    try:
+        store = read_json(path)
+        data = json.loads(store['data'])
+        rate = data['rate']
+    except (ValueError, KeyError, TypeError):
+        return
+    if rate == 1:
+        return
+    data['rate'] = 1
+    store['data'] = json.dumps(data, separators=(',', ':'))
+    path.write_text(json.dumps(store, ensure_ascii=False), encoding='utf-8')
+    print(f'已把 cheat 視窗記住的遊戲速度 ×{rate} 重設為 ×1（遊戲速度改用速度快捷鍵，兩邊同時開會相乘）')
 
 
 def install(raw):
     check_payload()
+    plugin_keys, override = load_plugin_config()
     content, root = resolve_game(raw)
     main = MainScript(content / 'js' / 'main.js')
     patched = main.render(patch_lines(main.lines, main.engine))
@@ -140,6 +239,14 @@ def install(raw):
     if update_dir.is_dir():
         shutil.rmtree(update_dir)
         print(f'已刪除官方更新器資料：{update_dir}')
+
+    plugin_dir = content / PLUGIN_DIR_NAME
+    plugin_dir.mkdir(exist_ok=True)
+    for name in PLUGIN_FILES:
+        shutil.copy2(PLUGIN_SRC / name, plugin_dir / name)
+    print(f'已複製速度快捷鍵外掛到 {plugin_dir}')
+    merge_shortcuts(root, override, plugin_keys)
+    reset_cheat_game_speed(root)
 
     if patched == main.text:
         print('main.js 已經載入 cheat，不用修改')
@@ -178,10 +285,10 @@ def restore(raw):
         else:
             print(f'註：main.js 和安裝前的備份不同，保留備份：{backup}')
 
-    cheat_dir = content / 'cheat'
-    if cheat_dir.is_dir():
-        shutil.rmtree(cheat_dir)
-        print(f'已刪除 {cheat_dir}')
+    for directory in (content / 'cheat', content / PLUGIN_DIR_NAME):
+        if directory.is_dir():
+            shutil.rmtree(directory)
+            print(f'已刪除 {directory}')
     description = content / 'cheat-version-description.json'
     if description.is_file():
         description.unlink()
