@@ -1,4 +1,4 @@
-"""把這個資料夾裡的 cheat 裝進 RPG Maker MV/MZ 遊戲，或從遊戲移除。
+"""把這個資料夾裡的 cheat（已停用自動更新）裝進 RPG Maker MV/MZ 遊戲，或從遊戲移除。
 
 用法：
     python patch.py <遊戲資料夾>            安裝或更新
@@ -135,6 +135,12 @@ def install(raw):
     shutil.copy2(PAYLOAD_DIR / 'cheat-version-description.json', content)
     print('已複製 cheat/ 與 cheat-version-description.json')
 
+    # 官方更新器留下的備份與紀錄：不清掉的話 import.js 可能把官方版回滾蓋回來
+    update_dir = root / 'www' / 'cheat-settings' / 'update'
+    if update_dir.is_dir():
+        shutil.rmtree(update_dir)
+        print(f'已刪除官方更新器資料：{update_dir}')
+
     if patched == main.text:
         print('main.js 已經載入 cheat，不用修改')
     else:
@@ -190,7 +196,7 @@ def main():
     for stream in (sys.stdout, sys.stderr):
         stream.reconfigure(errors='backslashreplace')
 
-    parser = argparse.ArgumentParser(description='安裝或移除 RPG Maker MV/MZ cheat')
+    parser = argparse.ArgumentParser(description='安裝或移除 RPG Maker MV/MZ cheat（已停用自動更新）')
     parser.add_argument('game', nargs='?', help='遊戲資料夾（Game.exe 所在或 www）')
     parser.add_argument('--restore', action='store_true', help='從遊戲移除 cheat')
     args = parser.parse_args()
