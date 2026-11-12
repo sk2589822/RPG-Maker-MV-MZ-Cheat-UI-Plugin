@@ -1,0 +1,9 @@
+{
+  "saveCurrentLocation": { "shortcut": "l" },
+  "openSaveScene": { "shortcut": "[" },
+  "openLoadScene": { "shortcut": "]" },
+  "enemyWound": { "shortcut": "alt s" },
+  "enemyRecovery": { "shortcut": "alt a" },
+  "partyWound": { "shortcut": "alt x" },
+  "partyRecovery": { "shortcut": "alt z" }
+}

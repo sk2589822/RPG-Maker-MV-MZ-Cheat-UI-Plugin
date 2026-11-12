@@ -54,7 +54,13 @@ Edit the raw minified file with a script that asserts each original string occur
 - the `main.js` edits: fetch the site's `index.html`, then its `assets/index-*.js`, and find the strings `auto generated for cheat` and `scriptUrls`. The MV anchor and three inserted lines, the MZ anchor and array line, and the lines it strips must match `MV_ANCHOR`, `MV_LINES`, `MV_CHEAT_LINE`, `MZ_ANCHOR`, and `MZ_LINE` in `patch.py`;
 - settings under `./www/cheat-settings`, with the updater's rollback state in `update/` (the target `import.js` restores from `update/previous` when `update-record.json` is mid-update; `patch.py` deletes `update/` so that cannot bring the official files back).
 
-**Done when** each assumption is confirmed in the target's code, or `patch.py` and the expected outputs in `test_patch.py` are updated to match it.
+The speed-keys plugin (`plugin/`, see README) sits beside the cheat and leans on these cheat behaviours, so confirm them too:
+
+- `shortcuts.json` keeps its shape (`{ <actionId>: { shortcut, param? } }`, key names like `alt 1`), the cheat ignores action ids it does not know, and it stops a key event only when the key is bound to one of its actions;
+- the cheat's default shortcut table (the object holding `toggleCheatModal: { shortcut: ... }`) binds none of the keys in `plugin/speed-keys.json`, unless `plugin/shortcuts-override.json` reassigns that action. The cheat fills missing defaults at first launch, after `patch.py`'s conflict clearing has run, so a new default on a plugin key would collide unnoticed;
+- `gameSpeed.json` still stores `{"data": "{\"rate\":…,\"sceneOption\":…}"}`, which `reset_cheat_game_speed` in `patch.py` reads.
+
+**Done when** each assumption is confirmed in the target's code, or `patch.py`, the plugin files, and the expectations in `tests/` are updated to match it.
 
 ## 5. Update the repo
 
@@ -63,9 +69,9 @@ Two commits, following the branch's convention, so the official-vs-ours diff sta
 1. `chore: update upstream to <tag>`: replace `cheat/` and `cheat-version-description.json` with the target's official files; in README set the version (title, source link) and list every official SHA-256; in `AUDIT.md`, fold the deltas the audit explained into the known-benign list and bump its heading's version, so the next audit starts from this build.
 2. `fix: disable network auto-updater in <tag>`: apply step 3's edits; in README update the modification table with the new minified strings and list the edited `cheat.js` hash next to the official one, marked `(官方原檔，修改前)`.
 
-Run `python -I -X utf8 .claude/skills/update-upstream/test_patch.py` on the second commit.
+Run `python -I -X utf8 tests/test_patch.py` and `node --test` on the second commit.
 
-**Done when** the test prints `0 failure(s)` and both commits exist. Push both together, so the remote never has a tip with the updater live, once the user confirms.
+**Done when** the first prints `0 failure(s)`, the second reports no failures, and both commits exist. Push both together, so the remote never has a tip with the updater live, once the user confirms.
 
 ## 6. Report
 

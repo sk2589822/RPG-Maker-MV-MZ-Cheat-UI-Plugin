@@ -38,11 +38,38 @@ python patch.py --restore <遊戲資料夾>  移除
 
 1. 複製 `cheat/` 和 `cheat-version-description.json` 到內容資料夾。
 2. 刪掉官方更新器留下的 `www/cheat-settings/update/`（原因見下方「遊戲以前用官方網頁裝過 v2 的話」）。
-3. 第一次修改前，把原本的 `js/main.js` 備份成 `js/main.js.cheat-backup`，再照官方網頁 patcher 的方式修改 `js/main.js`。重複執行不會重複插入。
+3. 安裝[速度快捷鍵外掛](#速度快捷鍵外掛)：複製到內容資料夾的 `cheat-plugin/`，把快捷鍵覆蓋設定合併進 `www/cheat-settings/shortcuts.json`，並把 cheat 視窗記住的遊戲速度重設為 1 倍。
+4. 第一次修改前，把原本的 `js/main.js` 備份成 `js/main.js.cheat-backup`，再照官方網頁 patcher 的方式修改 `js/main.js`，並多加一行載入外掛。重複執行不會重複插入。
 
-移除時會從 `main.js` 拿掉 cheat 那幾行，刪掉 `cheat/` 和 `cheat-version-description.json`；`main.js` 和備份一致時順便刪掉備份。設定檔 `www/cheat-settings/` 會保留。
+移除時會從 `main.js` 拿掉 cheat 和外掛那幾行，刪掉 `cheat/`、`cheat-plugin/` 和 `cheat-version-description.json`；`main.js` 和備份一致時順便刪掉備份。設定檔 `www/cheat-settings/` 會保留。
 
-不想用腳本的話，照下面手動做也一樣。
+不想用腳本的話，照下面手動做也一樣（手動步驟只裝官方 cheat，不含外掛）。
+
+## 速度快捷鍵外掛
+
+官方 v2 每個動作只能綁一個鍵，也沒有「把遊戲速度設成 N」，所以另外寫了 `plugin/`。它跟官方 `cheat/` 分開，官方更新時不受影響。
+
+| 檔案 | 用途 |
+| --- | --- |
+| `plugin/speed-keys.js` | 外掛本體：按鍵直接設定遊戲速度或移動速度，畫面上方會短暫顯示目前的值 |
+| `plugin/speed-keys.json` | 按鍵設定，寫法和 cheat 的 `shortcuts.json` 相同 |
+| `plugin/shortcuts-override.json` | 每次安裝時合併進遊戲 `shortcuts.json` 的 cheat 快捷鍵，讓每個遊戲都用同一套鍵 |
+
+預設按鍵：
+
+| 按鍵 | 效果 |
+| --- | --- |
+| `1` / `2` / `3`（`~` 右邊那排，不是數字鍵盤） | 遊戲速度 ×1 / ×2 / ×3 |
+| `Alt+1` / `Alt+2` / `Alt+3` | 移動速度 4 / 5 / 6，每秒重新套用一次，蓋過遊戲事件的改動 |
+
+- 改按鍵或速度：改 `plugin/speed-keys.json`。遊戲速度 0.1~10，移動速度 1~10；按鍵支援 `ctrl`、`alt`、`shift`、`meta` 加上數字、英文字母、`f1`~`f12`、`numpad0`~`numpad9`。
+- 改共用的 cheat 快捷鍵：改 `plugin/shortcuts-override.json`。只寫要覆蓋的動作，其他動作保留各遊戲自己的設定。
+- 衝突處理：安裝時會清掉遊戲 `shortcuts.json` 裡跟速度快捷鍵用同一個鍵的 cheat 快捷鍵（例如官方預設的 `Alt+1` 敵人重傷），並列出清掉了哪些；`shortcuts-override.json` 本身如果用到速度快捷鍵的鍵，安裝會直接中止。
+- 輸入框裡打字、按住不放的連發都不會觸發。
+- cheat 視窗裡的遊戲速度和外掛會相乘，請讓 cheat 視窗保持 1 倍；cheat 的「固定移動速度」也會跟外掛互相蓋掉，二選一使用。
+- 改完設定後重新執行 `patch.py` 套用到遊戲。
+
+測試：`python -I -X utf8 tests/test_patch.py` 和 `node --test`。
 
 ## 手動 patch 步驟
 
