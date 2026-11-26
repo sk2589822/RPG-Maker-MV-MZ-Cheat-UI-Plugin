@@ -11,15 +11,16 @@ RPG Maker MV/MZ 的作弊 UI。這個分支收錄官方 v2.2.0 的發布檔，�
 
 | 原始 | 改成 | 效果 |
 | --- | --- | --- |
-| `function o5(){return Wc().getItem(e5)!==\`false\`}` | `function o5(){return!1}` | 自動更新開關永遠視為關閉，啟動時不檢查、不安裝 |
-| `i5=(e,t)=>window.fetch(e,t)` | `i5=(e,t)=>Promise.reject(Error(\`update disabled\`))` | 更新器專用的 fetch 一律失敗；在設定裡手動按「檢查更新」也不會連網，只會顯示下載失敗 |
+| `function o7(){return Zc().getItem(e7)!==\`false\`}` | `function o7(){return!1}` | 自動更新開關永遠視為關閉，啟動時不檢查、不安裝 |
+| `i7=(e,t)=>window.fetch(e,t)` | `i7=(e,t)=>Promise.reject(Error(\`update disabled\`))` | 更新器專用的 fetch 一律失敗；在設定裡手動按「檢查更新」或載入「舊版本」清單也不會連網，只會顯示下載失敗 |
 
 SHA-256：
 
 ```
 40b0bd9c9623d17889931400c8524739b9c6c9a6a64b1a93774f85dbceab46c7  cheat-version-description.json   (官方原檔)
 0a6d1e4c1f22940561470df2df35267684a196fe3c30e1336d9eae2ef15fdcf7  cheat/cheat.css                  (官方原檔)
-2cca7cc16d3e3892fb45cf5ec92516b222698fde18ce0ab1654fbe8eb9102f79  cheat/cheat.js                   (官方原檔)
+8f786fff89a99181e06d26df2d76d92dc2c8c19bb0220cc787f6f0234c1f0cfb  cheat/cheat.js                   (已修改)
+2cca7cc16d3e3892fb45cf5ec92516b222698fde18ce0ab1654fbe8eb9102f79  cheat/cheat.js                   (官方原檔，修改前)
 6b69fbb7aaefcee0a46696c0940c4bf6322ba76fbf20341cc314516f0d6a330a  cheat/init/import.js             (官方原檔)
 6d7e6d13766b9bc7cf4ff189184f8b04e14cb52ed674e1108ae11591c6664c66  cheat/LICENSES.txt               (官方原檔)
 ```

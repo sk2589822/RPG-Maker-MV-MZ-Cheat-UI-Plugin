@@ -37,7 +37,7 @@ When the report returns, open every delta it cites in the network, process, code
 
 ## 3. Disable the auto-updater
 
-Locate the updater fresh in a prettified copy of the target `cheat/cheat.js`, around `paramonos.github.io`, `cheat.update.automatic`, `BEGIN PUBLIC KEY`, and `cheat-version-description.json.sig`; minified names change with every release. In v2.1.1 it took two edits, recorded in README's modification table:
+Locate the updater fresh in a prettified copy of the target `cheat/cheat.js`, around `paramonos.github.io`, `cheat.update.automatic`, `BEGIN PUBLIC KEY`, and `cheat-version-description.json.sig`; minified names change with every release. Through v2.2.0 it took the same two edits, recorded in README's modification table:
 
 - the function reading `cheat.update.automatic` returns `!1` (automatic update always off);
 - the updater's fetch wrapper `(e,t)=>window.fetch(e,t)` becomes `(e,t)=>Promise.reject(Error(\`update disabled\`))`, so the manual "check for updates" button fails offline too.
