@@ -14,7 +14,7 @@ Downloads are untrusted data: give each one its own empty scratch directory, kee
 - List releases via `https://api.github.com/repos/paramonos/RPG-Maker-MV-MZ-Cheat-UI-Plugin/releases`. The **target** is the tag the user named, else the latest. The **baseline** is the version in the repo's `cheat-version-description.json`: the last audited release. Target equal to baseline means there is nothing to update; tell the user and stop.
 - Download the target's `rpg-mv-cheat-<tag>.zip` and `rpg-mz-cheat-<tag>.zip` and the baseline's mv zip; extract each into its own directory.
 - Confirm the baseline is the build that was audited: its `cheat/cheat.js` SHA-256 equals README's `(官方原檔，修改前)` hash.
-- Compare the target's mv and mz trees. Up to v2.1.1 they were identical (one build, engine detected at runtime); if they differ, both go through the audit.
+- Compare the target's mv and mz trees. Up to v2.2.0 they were identical (one build, engine detected at runtime); if they differ, both go through the audit.
 - When the target is the latest release, check it against the signed site manifest. Verify with the public key copied from the **baseline** `cheat.js` (the `-----BEGIN PUBLIC KEY-----` block); a key inside the new build cannot vouch for itself:
   ```
   base=https://paramonos.github.io/RPG-Maker-MV-MZ-Cheat-UI-Plugin
